@@ -1,74 +1,54 @@
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    background-color: #2c2f33;
+    color: #fff;
     font-family: Arial, sans-serif;
 }
-
-.todo-container {
-    width: 400px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 5px;
-    background-color: #f9f9f9;
-}
-
-.todo-header {
+.container {
     text-align: center;
+}
+.converter-box {
+    background-color: #4b5058;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+.converter-box h2 {
     margin-bottom: 20px;
 }
-
-.todo-input {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.todo-input input {
-    flex-grow: 1;
+.converter-box input, .converter-box select, .converter-box button {
+    width: calc(100% - 20px);
     padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
-}
-
-.todo-input button {
-    padding: 10px 20px;
-    font-size: 16px;
+    margin: 10px 10px 10px 0;
     border: none;
     border-radius: 5px;
-    background-color: #28a745;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.converter-box button {
+    background-color: #00bfff;
     color: white;
     cursor: pointer;
 }
-
-.todo-input button:hover {
-    background-color: #218838;
+.converter-box button:hover {
+    background-color: #009acd;
 }
-
-.todo-stats {
-    margin-bottom: 10px;
+.result {
+    margin-top: 20px;
+    font-size: 18px;
 }
-
-.todo-list {
-    width: 100%;
-    border-collapse: collapse;
+#chart-container {
+    width: 80%;
+    max-width: 800px;
 }
-
-.todo-list th, .todo-list td {
-    padding: 10px;
-    border: 1px solid #ddd;
-}
-
-.todo-list th {
-    background-color: #f2f2f2;
-}
-
-.task-completed {
-    text-decoration: line-through;
-    color: grey;
+.error {
+    color: red;
+    margin-top: 20px;
 }
