@@ -3,35 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de monedas Nacional</title>
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/estilos.css" />
-    <title>Todo List</title>
 </head>
 <body>
-    <div class="todo-container">
-        <h2 class="todo-header">Todo List</h2>
-        <div class="todo-input">
-            <input type="text" id="new-task-input" placeholder="Nueva tarea">
-            <button onclick="addTask()">Agregar</button>
+    <div class="container">
+        <h1>Conversor de monedas Nacional</h1>
+        <div class="converter-box">
+            <h2>Pesos CLP</h2>
+            <input type="number" id="amount" placeholder="Ingrese el monto en CLP" required>
+            <label for="currency-select">Moneda a convertir:</label>
+            <select id="currency-select" required>
+                <option value="">Seleccione moneda</option>
+                <option value="dolar">Dólar estadounidense (USD)</option>
+                <option value="euro">Euro (EUR)</option>
+                <option value="utm">Unidad Tributaria Mensual (UTM)</option>
+                <option value="uf">Unidad de Fomento (UF)</option>
+            </select>
+            <button id="convert-btn">Buscar</button>
+            <div class="result" id="result"></div>
+            <div class="error" id="error"></div>
         </div>
-        <div class="todo-stats">
-            <div>Total: <span id="total-tasks">0</span></div>
-            <div>Realizadas: <span id="completed-tasks">0</span></div>
+        <div id="chart-container">
+            <canvas id="currencyChart"></canvas>
         </div>
-        <table class="todo-list">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tarea</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="task-list">
-                <!-- Aquí se agregarán las tareas -->
-            </tbody>
-        </table>
     </div>
+
     <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="assets/js/script.js"></script>
 </body>
 </html>
