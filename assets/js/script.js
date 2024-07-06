@@ -1,68 +1,69 @@
-let tasks = [
-    { id: 1, description: 'Tarea inicial 1', completed: false },
-    { id: 2, description: 'Tarea inicial 2', completed: false },
-    { id: 3, description: 'Tarea inicial 3', completed: false }
-];
-let nextId = 4; 
+let currencyChart;
 
-function addTask() {
-    const taskInput = document.getElementById('new-task-input');
-    const taskDescription = taskInput.value.trim();
-    
-    if (taskDescription === '') {
+document.getElementById('convert-btn').addEventListener('click', async function() {
+    const amount = document.getElementById('amount').value;
+    const currency = document.getElementById('currency-select').value;
+    const resultElement = document.getElementById('result');
+    const errorElement = document.getElementById('error');
+
+    if (amount === '' || currency === '') {
+        alert('Por favor ingrese un monto y seleccione una moneda');
         return;
     }
+//Manejo de errores mediante Try catch
+    try {
+        const response = await fetch('https://mindicador.cl/api/' + currency);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const data = await response.json();
+        
+        const conversionRate = data.serie[0].valor;
+        const convertedAmount = (amount / conversionRate).toFixed(2);
+        resultElement.textContent = `Resultado: ${convertedAmount} ${currency.toUpperCase()}`;
+        errorElement.textContent = '';
 
-    const task = {
-        id: nextId++,
-        description: taskDescription,
-        completed: false
-    };
-    tasks.push(task);
-    taskInput.value = '';
-    updateTaskList();
-    updateStats();
-}
+        // Muestra el gráfico con los últimos 10 días
+        const labels = data.serie.slice(0, 10).map(item => new Date(item.fecha).toLocaleDateString()).reverse();
+        const values = data.serie.slice(0, 10).map(item => item.valor).reverse();
 
-function toggleTaskCompletion(id) {
-    const task = tasks.find(task => task.id === id);
-    task.completed = !task.completed;
-    updateTaskList();
-    updateStats();
-}
+        if (currencyChart) {
+            currencyChart.destroy();
+        }
 
-function deleteTask(id) {
-    tasks = tasks.filter(task => task.id !== id);
-    updateTaskList();
-    updateStats();
-}
-
-function updateTaskList() {
-    const taskList = document.getElementById('task-list');
-    taskList.innerHTML = '';
-
-    tasks.forEach(task => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${task.id}</td>
-            <td class="${task.completed ? 'task-completed' : ''}">${task.description}</td>
-            <td>
-                <button onclick="toggleTaskCompletion(${task.id})">${task.completed ? 'Cambiar' : 'Completar'}</button>
-                <button onclick="deleteTask(${task.id})">Eliminar</button>
-            </td>
-        `;
-        taskList.appendChild(row);
-    });
-}
-
-function updateStats() {
-    const totalTasks = document.getElementById('total-tasks');
-    const completedTasks = document.getElementById('completed-tasks');
-    totalTasks.textContent = tasks.length;
-    completedTasks.textContent = tasks.filter(task => task.completed).length;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    updateTaskList();
-    updateStats();
+        const ctx = document.getElementById('currencyChart').getContext('2d');
+        currencyChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: `Valor de ${currency.toUpperCase()} en los últimos 10 días`,
+                    data: values,
+                    borderColor: 'rgba(0, 191, 255, 1)',
+                    backgroundColor: 'rgba(0, 191, 255, 0.2)',
+                    fill: true,
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Fecha'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Valor'
+                        }
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        //Muestra mensajes de error
+        console.error('Error al obtener los datos:', error);
+        errorElement.textContent = 'Hubo un error al obtener los datos. Por favor intente nuevamente.';
+    }
 });
